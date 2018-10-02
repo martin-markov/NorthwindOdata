@@ -24,7 +24,7 @@ namespace Northwind.UI.Controllers
 
         public async Task<ActionResult> Index(string customerName = "")
         {
-            CustomerListViewModel model = await this.CustomersService.GetAll(customerName);
+            CustomerListViewModel model = await this.CustomersService.GetCustomers(customerName);
             return View(model);
         }
 
@@ -33,7 +33,7 @@ namespace Northwind.UI.Controllers
             if (String.IsNullOrEmpty(customerID))
                 HttpNotFound();
 
-            //CustomerViewModel model = await this.CustomersService.GetCustomerDetails(customerID);
+            CustomerViewModel model = await this.CustomersService.GetCustomerDetails(customerID);
             return View();
         }
 

@@ -19,9 +19,27 @@ namespace Northwind.UI.Services
 
         }
 
-        internal async Task<CustomerListViewModel> GetAll(string customerName)
+        internal async Task<CustomerListViewModel> GetCustomers(string customerName)
         {
             CustomerListViewModel vm = new CustomerListViewModel();
+            string host = "http://localhost:63927/odata";
+
+            ODataClient client = new ODataClient(host);
+            if(String.IsNullOrEmpty(customerName))
+            {
+                vm.Customers = await client.For<Customer>()
+                    .Expand(x => x.Orders)
+                    .Select(x => new { x.CustomerID, x.ContactName, Orders = x.Orders.Select(o => o.OrderID) })
+                    .FindEntriesAsync();
+            }
+            else
+            {
+                vm.Customers = await client.For<Customer>()
+                    .Expand(x => x.Orders)
+                    .Select(x => new { x.CustomerID, x.ContactName, Orders = x.Orders.Select(o => o.OrderID) })
+                    .Filter(x => x.ContactName.Contains(customerName))
+                    .FindEntriesAsync();
+            }
             //string host = "http://localhost:63927/";
             //using (HttpClient client = new HttpClient())
             //{
@@ -35,21 +53,17 @@ namespace Northwind.UI.Services
             //    vm.Customers = JsonConvert.DeserializeObject<ODataResponse<Customer>>(content).Value ?? Enumerable.Empty<Customer>();
 
             //}
-            string host = "http://localhost:63927";
-            ODataClient client = new ODataClient(host);
             //vm.Customers = await client.For<Customer>().Expand(x=>x.Orders).Select(x=> new {x.CustomerID , x.ContactName, Orders = x.Orders.Select(o=>o.OrderID)}).FindEntriesAsync();
-            var a = await client.For<Customer>().FindEntriesAsync();
-            
+
             return vm;
         }
 
-        internal CustomerViewModel GetCustomerDetails(string customerID)
+        public async Task<CustomerViewModel> GetCustomerDetails(string customerID)
         {
             CustomerViewModel vm = new CustomerViewModel();
             string host = "http://localhost:63927/";
             ODataClient client = new ODataClient(host);
-
-
+            vm.Form = await client.For<Customer>().Filter(x=>x.CustomerID == customerID).Expand(c=>c.Orders.SelectMany()).Expand(o=>o.Orders).FindEntryAsync();
             return vm;
         }
     }

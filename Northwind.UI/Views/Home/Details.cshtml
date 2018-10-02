@@ -1,5 +1,7 @@
-﻿@{
+﻿@using Northwind.UI.Models;
+@{
+    @model CustomerViewModel
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>@Model.Form.ContactName</h2>

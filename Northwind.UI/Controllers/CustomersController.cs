@@ -26,7 +26,7 @@ namespace Northwind.UI.Controllers
 
         public async Task<ActionResult> List(string customerName = "")
         {
-            CustomerListViewModel model = await this.CustomersService.GetAll(customerName);
+            CustomerListViewModel model = await this.CustomersService.GetCustomers(customerName);
             return View(model);
         }
 

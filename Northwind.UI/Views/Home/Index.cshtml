@@ -1,10 +1,9 @@
 ﻿@using Northwind.UI.Models;
+@using System.Web.Helpers;
 @{
-    @model Northwind.UI.Models.CustomerListViewModel
+    @model CustomerListViewModel
     ViewBag.Title = "Customers";
-    System.Web.Helpers.WebGrid grid = new WebGrid(Model.Customers, canSort: true, canPage: true, rowsPerPage: 20, selectionFieldName: "CustomerID");
-
-
+    WebGrid grid = new WebGrid(Model.Customers, canSort: true, canPage: true, rowsPerPage: 20, selectionFieldName: "CustomerID");
 }
 
 

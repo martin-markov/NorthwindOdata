@@ -40,7 +40,7 @@ namespace Northwind.API.Controllers
             _repo = repo;
         }
         // GET odata/Customers
-        [EnableQuery]
+        [EnableQuery(MaxExpansionDepth = 5)]
         public IQueryable<Customer> GetCustomers()
         {
             return _repo.GetAll();
@@ -48,7 +48,6 @@ namespace Northwind.API.Controllers
 
         // GET odata/Customers(5)
         [EnableQuery(MaxExpansionDepth=5)]
-        
         public SingleResult<Customer> GetCustomer([FromODataUri] string key)
         {
             return SingleResult.Create(_repo.GetById(key));
