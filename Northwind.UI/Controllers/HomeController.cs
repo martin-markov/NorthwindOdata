@@ -34,7 +34,7 @@ namespace Northwind.UI.Controllers
                 HttpNotFound();
 
             CustomerViewModel model = await this.CustomersService.GetCustomerDetails(customerID);
-            return View();
+            return View(model);
         }
 
 

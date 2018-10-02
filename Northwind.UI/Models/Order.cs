@@ -27,5 +27,28 @@ namespace Northwind.UI.Models
         public string ShipCountry { get; set; }
         public virtual ICollection<Order_Detail> Order_Details { get; set; }
 
+        public double TotalPrice
+        {
+            get
+            {
+                return Order_Details.Select(x => (float)(x.Quantity * (float)x.UnitPrice * (1 - x.Discount))).Sum();
+            }
+        }
+
+        public bool HasDiscontinuedProduct
+        {
+            get
+            {
+                return Order_Details.Any(x=>x.Product.Discontinued);
+            }
+        }
+
+        public bool HasInsufficientQuantity
+        {
+            get
+            {
+                return Order_Details.Any(x => x.Product.UnitsInStock < x.Product.UnitsOnOrder);
+            }
+        }
     }
 }

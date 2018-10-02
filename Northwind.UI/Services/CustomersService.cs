@@ -61,9 +61,13 @@ namespace Northwind.UI.Services
         public async Task<CustomerViewModel> GetCustomerDetails(string customerID)
         {
             CustomerViewModel vm = new CustomerViewModel();
-            string host = "http://localhost:63927/";
+            string host = "http://localhost:63927/odata";
             ODataClient client = new ODataClient(host);
-            vm.Form = await client.For<Customer>().Filter(x=>x.CustomerID == customerID).Expand(c=>c.Orders.SelectMany()).Expand(o=>o.Orders).FindEntryAsync();
+            //string query = String.Format("Customers('{0}')?$expand=Orders($expand=Order_Details($expand=Product))", customerID);
+            //var a = await client.FindEntryAsync(query);
+
+            vm.Form = await client.For<Customer>().Key(customerID).Expand("Orders,Orders/Order_Details,Orders/Order_Details/Product").FindEntryAsync();
+
             return vm;
         }
     }
